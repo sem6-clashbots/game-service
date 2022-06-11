@@ -1,52 +1,81 @@
 package com.clashbots.game.controller;
 
 //import com.clashbots.comment.RabbitmqSender;
-import com.clashbots.game.entity.Game;
-import com.clashbots.game.entity.Move;
+
+import com.clashbots.game.entity.*;
 import com.clashbots.game.service.GameService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.util.HtmlUtils;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/games")
 @Slf4j
 @CrossOrigin(origins = "http://localhost:3000")
 public class GameController {
-    @Value("${server.port}")
-    private String port;
-
     @Autowired
     private GameService gameService;
 
-    @PostMapping("/")
-    public Game saveGame(@RequestBody Game game){
-        log.info("inside save game method of GameController");
-        return gameService.saveGame(game);
+    /* START||FIND GAME*/
+    @PostMapping("/start")
+    public ResponseEntity<Game> startFindGame(@RequestBody Init init) {
+        log.info("inside START game method of GameController");
+        //try to find a game
+        List<Game> games = gameService.findGameSearching(init.getUserSide());
+        Game game;
+
+        if(games.size() > 0){
+            //found game
+            game = games.get(0);
+            log.info("found: " + game);
+            game.setPlayer(init.getUserAddress(), init.getUserSide());
+            game.setStatus(GameStatus.IN_PROGRESS);
+        }else{
+            //make game
+            log.info("nothing found - creating new game");
+            game = new Game();
+            game.setPlayer(init.getUserAddress(), init.getUserSide());
+            game.setStatus(GameStatus.SEARCHING);
+        }
+
+        return new ResponseEntity<>(gameService.saveGame(game), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Game> findGameById(@PathVariable("id") Long gameId){
+    public ResponseEntity<Optional<Game>> findGameById(@PathVariable("id") UUID gameId) {
         log.info("inside find game by id method of GameController");
         return new ResponseEntity<>(gameService.findGame(gameId), HttpStatus.OK);
     }
 
-    @MessageMapping("/hello")
-    @SendTo("/topic/greetings")
-    public Move messageGame(Move move){
-        return new Move("Hello, " + HtmlUtils.htmlEscape(move.getContent()) + "!");
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
+
+    @MessageMapping("/start")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public Message start(Message message) throws Exception {
+        System.out.println("sending msg: " + message.getMessage());
+        System.out.println("On topic: " + message.getGameId().toString());
+        simpMessagingTemplate.convertAndSendToUser(message.getGameId().toString(), "/start", message);
+        return message;
     }
-    @MessageMapping("/incoming")
-    @SendTo("/topic/outgoing")
-    public String incoming(Move move) {
-        log.info("inside move game");
-        return String.format("Application on port %s responded to your message: \"%s\"", port, move.getContent());
+
+    @MessageMapping("/move")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public Message move(Message message) throws Exception {
+        System.out.println("sending msg: " + message.getMessage());
+        System.out.println("On topic: " + message.getGameId().toString());
+        simpMessagingTemplate.convertAndSendToUser(message.getGameId().toString(), "/start", message);
+        return message;
     }
 
 //    private RabbitmqSender rabbitMqSender;

@@ -25,11 +25,52 @@ public class Game extends BaseEntity {
     @Column(columnDefinition = "varchar(255) default 'SEARCHING'")
     private GameStatus status;
 
+    private Integer human_hp = 5;
+    private Integer robot_hp = 5;
+
+    private Move human_move = Move.WAIT;
+    private Move robot_move = Move.WAIT;
+
+    private Side winner;
+
     public void setPlayer(String userAddress, Side userSide) {
-        if(userSide == Side.HUMANS){
+        if (userSide == Side.HUMANS) {
             this.setUser_id_human(userAddress);
-        }else if(userSide == Side.ROBOTS){
+        } else if (userSide == Side.ROBOTS) {
             this.setUser_id_robot(userAddress);
+        }
+    }
+
+    public void setMove(String userAddress, Move move) {
+        if (move != Move.WAIT) {
+            if (userAddress.equals(this.user_id_human)) {
+                this.setHuman_move(move);
+            } else if (userAddress.equals(this.user_id_robot)) {
+                this.setRobot_move(move);
+            }
+        }
+    }
+
+    public void endRound(Side winner) {
+        boolean endGame = false;
+        if (winner == Side.ROBOTS) {
+            int newHp = this.getHuman_hp() - 1;
+            this.setHuman_hp(newHp);
+            if (newHp <= 0){
+                endGame = true;
+            }
+        }
+        if (winner == Side.HUMANS) {
+            int newHp = this.getRobot_hp() - 1;
+            this.setRobot_hp(newHp);
+            if (newHp <= 0){
+                endGame = true;
+            }
+        }
+
+        if(endGame){
+            this.setWinner(winner);
+            this.setStatus(GameStatus.FINISHED);
         }
     }
 }

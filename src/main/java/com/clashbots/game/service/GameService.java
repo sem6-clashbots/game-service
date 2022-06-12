@@ -31,17 +31,22 @@ public class GameService {
     public List<Game> findGameSearching(Side userSide) {
         log.info("inside search opponent of GameService");
 
-        if(userSide == Side.HUMANS){
+        if (userSide == Side.HUMANS) {
             return gameRepository.findRobotOpponent();
-        }else if(userSide == Side.ROBOTS){
+        } else if (userSide == Side.ROBOTS) {
             return gameRepository.findHumanOpponent();
-        }else{
+        } else {
             return null;
         }
     }
 
-//    public Game startGame() {
-//        log.info("inside save game method of GameService");
-//        return gameRepository.save(notification);
-//    }
+    public List<Game> findStartingGames() {
+        log.info("inside find starting games gservice");
+        return gameRepository.findStartingGames();
+    }
+
+    public List<Game> findInProgressGames() {
+        log.info("inside find in progress games in gservice");
+        return gameRepository.findInProgressGames();
+    }
 }

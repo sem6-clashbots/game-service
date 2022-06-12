@@ -12,6 +12,5 @@ import java.util.UUID;
 public class Message {
     private UUID gameId;
     private String senderAddress;
-    private String receiverAddress;
-    private String message;
+    private Move move;
 }

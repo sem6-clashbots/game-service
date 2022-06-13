@@ -1,0 +1,6 @@
+deploy:
+  - okteto build -t okteto.dev/game-service:dev -f ../Dockerfile ../.
+  - kubectl apply -f ../k8s
+  - kubectl rollout restart deployment/game-service
+devs:
+  - ../okteto.yml

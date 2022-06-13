@@ -1,0 +1,14 @@
+name: game-service
+image: okteto/maven:latest
+command: bash
+workdir: /okteto
+volumes:
+  - /root/.m2
+sync:
+  - .:/okteto
+forward:
+  - 9006:9006
+resources:
+  limits:
+    cpu: "1"
+    memory: 1Gi

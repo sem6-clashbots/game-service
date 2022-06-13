@@ -19,5 +19,3 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://10.8.65.168:8761/eureka/
-  instance:
-    hostname: https://game-service-cahox.cloud.okteto.net

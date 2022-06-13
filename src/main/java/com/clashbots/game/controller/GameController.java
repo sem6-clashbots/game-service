@@ -28,8 +28,6 @@ public class GameController {
     @Autowired
     private GameService gameService;
 
-    Random random = new Random();
-
     /* START||FIND GAME*/
     @PostMapping("/start")
     public ResponseEntity<Game> startFindGame(@RequestBody Init init) {

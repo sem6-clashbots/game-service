@@ -23,7 +23,7 @@ import java.util.UUID;
 @RestController
 @EnableScheduling
 @RequestMapping("/games")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://cb-game-platform.herokuapp.com/")
 public class GameController {
     @Autowired
     private GameService gameService;
@@ -65,7 +65,6 @@ public class GameController {
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @MessageMapping("/start")
-    @CrossOrigin(origins = "http://localhost:3000")
     public void start(String gameId) throws Exception {
         try {
             simpMessagingTemplate.convertAndSendToUser(gameId, "/start", gameId);
@@ -75,7 +74,6 @@ public class GameController {
     }
 
     @MessageMapping("/move")
-    @CrossOrigin(origins = "http://localhost:3000")
     public void move(Message message) throws Exception {
         try {
             Game game = gameService.findGame(message.getGameId()).stream().findFirst().orElse(null);

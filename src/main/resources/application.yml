@@ -4,14 +4,14 @@ server:
 spring:
   application:
     name: GAME-SERVICE
-  rabbitmq:
-    host: localhost
-    password: guest
-    port: 15672
-    username: guest
-    exchange: user.exchange
-    queue: user.queue
-    routingkey: user.routingkey
+#  rabbitmq:
+#    host: localhost
+#    password: guest
+#    port: 15672
+#    username: guest
+#    exchange: user.exchange
+#    queue: user.queue
+#    routingkey: user.routingkey
 
 eureka:
   client:

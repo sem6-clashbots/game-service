@@ -18,4 +18,6 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://10.8.65.168:8761/eureka/
+      defaultZone: http://10.8.49.128:8761/eureka/
+  instance:
+    hostname: GAME

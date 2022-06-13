@@ -20,4 +20,4 @@ eureka:
     service-url:
       defaultZone: http://10.8.49.128:8761/eureka/
   instance:
-    hostname: http://game-service-cahox.cloud.okteto.net
+    hostname: https://game-service-cahox.cloud.okteto.net

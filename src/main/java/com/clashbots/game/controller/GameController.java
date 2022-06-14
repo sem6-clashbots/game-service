@@ -16,7 +16,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.UUID;
 
 @Slf4j
@@ -27,6 +26,27 @@ import java.util.UUID;
 public class GameController {
     @Autowired
     private GameService gameService;
+
+    /*Get one by ID*/
+    @GetMapping("/")
+    public ResponseEntity<List<Game>> findGames() {
+        log.info("inside find game by id method of GameController");
+        return new ResponseEntity<>(gameService.findGames(), HttpStatus.OK);
+    }
+
+    /*Get one by ID*/
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Game>> findGameById(@PathVariable("id") UUID gameId) {
+        log.info("inside find game by id method of GameController");
+        return new ResponseEntity<>(gameService.findGame(gameId), HttpStatus.OK);
+    }
+
+    /*Get by Status*/
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<Game>> findByStatus(@PathVariable("status") GameStatus status) {
+        log.info("inside find game by id method of GameController");
+        return new ResponseEntity<>(gameService.findGamesByStatus(status), HttpStatus.OK);
+    }
 
     /* START||FIND GAME*/
     @PostMapping("/start")
@@ -51,12 +71,6 @@ public class GameController {
         }
 
         return new ResponseEntity<>(gameService.saveGame(game), HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<Game>> findGameById(@PathVariable("id") UUID gameId) {
-        log.info("inside find game by id method of GameController");
-        return new ResponseEntity<>(gameService.findGame(gameId), HttpStatus.OK);
     }
 
     @Autowired

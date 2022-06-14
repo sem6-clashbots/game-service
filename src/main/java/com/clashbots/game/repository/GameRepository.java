@@ -12,6 +12,9 @@ import java.util.UUID;
 
 @Repository
 public interface GameRepository extends JpaRepository<Game, UUID> {
+    @Query("SELECT g from Game g where g.status = :status")
+    List<Game> findByStatus(@Param("status")GameStatus status);
+
     @Query("SELECT g from Game g where g.status = 'SEARCHING' AND g.user_id_human IS NULL AND g.user_id_robot IS NOT NULL ORDER BY g.created_at")
     List<Game> findRobotOpponent();
     @Query("SELECT g from Game g where g.status = 'SEARCHING' AND g.user_id_robot IS NULL AND g.user_id_human IS NOT NULL ORDER BY g.created_at")

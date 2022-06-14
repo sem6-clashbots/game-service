@@ -23,6 +23,16 @@ public class GameService {
         return gameRepository.save(game);
     }
 
+    public List<Game> findGames() {
+        log.info("inside find game by id method of GameService");
+        return gameRepository.findAll();
+    }
+
+    public List<Game> findGamesByStatus(GameStatus status) {
+        log.info("inside find game by id method of GameService");
+        return gameRepository.findByStatus(status);
+    }
+
     public Optional<Game> findGame(UUID id) {
         log.info("inside find game by id method of GameService");
         return gameRepository.findById(id);

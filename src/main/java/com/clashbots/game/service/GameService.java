@@ -59,4 +59,8 @@ public class GameService {
         log.info("inside find in progress games in gservice");
         return gameRepository.findInProgressGames();
     }
+
+    public void reset(){
+        gameRepository.deleteAll();
+    }
 }

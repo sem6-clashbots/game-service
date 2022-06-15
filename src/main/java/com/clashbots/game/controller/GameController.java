@@ -49,6 +49,14 @@ public class GameController {
         return new ResponseEntity<>(gameService.findGamesByStatus(status), HttpStatus.OK);
     }
 
+    /*Get one by ID*/
+    @DeleteMapping("/reset")
+    public ResponseEntity<String> reset() {
+        log.info("inside find game by id method of GameController");
+        gameService.reset();
+        return new ResponseEntity<>("RESET", HttpStatus.OK);
+    }
+
     /* START||FIND GAME*/
     @PostMapping("/start")
     public ResponseEntity<Game> startFindGame(@RequestBody Init init) {

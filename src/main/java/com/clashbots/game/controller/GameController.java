@@ -23,6 +23,7 @@ import java.util.UUID;
 @EnableScheduling
 @RequestMapping("/games")
 @CrossOrigin(origins = "https://cb-game-platform.herokuapp.com/")
+//@CrossOrigin(origins = "http://localhost:3000/")
 public class GameController {
     @Autowired
     private GameService gameService;

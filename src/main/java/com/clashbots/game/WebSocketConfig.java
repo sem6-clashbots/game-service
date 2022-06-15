@@ -10,6 +10,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 @CrossOrigin(origins = "https://cb-game-platform.herokuapp.com/")
+//@CrossOrigin(origins = "http://localhost:3000/")
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
@@ -22,5 +23,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws").setAllowedOrigins("https://cb-game-platform.herokuapp.com/").withSockJS();
+//        registry.addEndpoint("/ws").setAllowedOrigins("http://localhost:3000/").withSockJS();
     }
 }

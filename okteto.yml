@@ -10,5 +10,5 @@ forward:
   - 9006:9006
 resources:
   limits:
-    cpu: "3"
+    cpu: "1"
     memory: 3Gi
